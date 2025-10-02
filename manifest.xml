@@ -2,59 +2,100 @@
 <OfficeApp
   xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
-  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
   xsi:type="MailApp">
 
-  <Id>00000000-0000-0000-0000-000000000001</Id>
+  <Id>f3d6b1a1-0000-4c00-9c00-000000000001</Id>
   <Version>1.0.0.0</Version>
-  <ProviderName>Sample</ProviderName>
+  <ProviderName>Your Name</ProviderName>
   <DefaultLocale>ja-JP</DefaultLocale>
-  <DisplayName DefaultValue="OnSend Minimal Confirm"/>
-  <Description DefaultValue="送信時に確認ダイアログを表示するテスト用アドイン"/>
-  <IconUrl DefaultValue="https://localhost:3000/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/icon-80.png"/>
-  <SupportUrl DefaultValue="https://localhost:3000"/>
+  <DisplayName DefaultValue="送信前確認アドイン（試験）" />
+  <Description DefaultValue="送信時に宛先・添付を検査して警告します。" />
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/assets/icon-80.png" />
+
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/" />
 
   <Hosts>
-    <Host Name="Mailbox"/>
+    <Host Name="Mailbox" />
   </Hosts>
 
-  <!-- OnMessageSend が使えるのは Mailbox 1.10 以上 -->
+  <!-- UIレスのイベント処理のみなので ReadWriteItem でOK -->
   <Requirements>
-    <Sets DefaultMinVersion="1.10" Name="Mailbox"/>
+    <Sets DefaultMinVersion="1.12">
+      <Set Name="Mailbox" MinVersion="1.12" />
+    </Sets>
   </Requirements>
-
-  <Permissions>ReadItem</Permissions>
+  <Permissions>ReadWriteItem</Permissions>
 
   <Rule xsi:type="RuleCollection" Mode="Or">
-    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Compose" />
+    <Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Compose" />
   </Rule>
 
   <DisableEntityHighlighting>false</DisableEntityHighlighting>
 
-  <VersionOverrides Version="1.0"
-    xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.0">
+  <VersionOverrides xsi:type="mailappor:VersionOverrides" Version="1.1">
+    <mailappor:Requirements>
+      <mailappor:Sets DefaultMinVersion="1.12">
+        <mailappor:Set Name="Mailbox" MinVersion="1.12"/>
+      </mailappor:Sets>
+    </mailappor:Requirements>
 
-    <Requirements>
-      <bt:Sets DefaultMinVersion="1.10" Name="Mailbox"/>
-    </Requirements>
+    <!-- ランタイム：関数ファイル（function.html） -->
+    <mailappor:Runtimes>
+      <mailappor:Runtime resid="functionsRuntime" lifetime="short" />
+    </mailappor:Runtimes>
+    <mailappor:Resources>
+      <mailappor:Urls>
+        <mailappor:Url id="functionsRuntime" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/function.html"/>
+        <mailappor:Url id="confirmDialog" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/dialog.html"/>
+      </mailappor:Urls>
+      <mailappor:ShortStrings>
+        <mailappor:String id="residAppName" DefaultValue="送信前確認アドイン（試験）"/>
+      </mailappor:ShortStrings>
+    </mailappor:Resources>
 
-    <Hosts>
-      <Host xsi:type="MailHost">
-        <LaunchEvents>
-          <LaunchEvent Type="OnMessageSend" FunctionName="onMessageSend" SendMode="PromptUser"/>
-        </LaunchEvents>
-        <FunctionFile resid="FunctionFile.Url"/>
-      </Host>
-    </Hosts>
+    <mailappor:Hosts>
+      <mailappor:Host xsi:type="mailappor:Mailbox">
+        <mailappor:ExtensionPoint xsi:type="mailappor:LaunchEvent">
+          <!-- OnMessageSend/OnAppointmentSend をハンドル。SendMode は SoftBlock で開始 -->
+          <mailappor:LaunchEvents>
+            <mailappor:LaunchEvent Type="OnMessageSend"
+                                   FunctionName="onMessageSendHandler"
+                                   SendMode="SoftBlock" />
+            <mailappor:LaunchEvent Type="OnAppointmentSend"
+                                   FunctionName="onAppointmentSendHandler"
+                                   SendMode="SoftBlock" />
+          </mailappor:LaunchEvents>
+          <mailappor:SourceLocation resid="functionsRuntime"/>
+        </mailappor:ExtensionPoint>
 
-    <Resources>
-      <bt:Urls>
-        <bt:Url id="FunctionFile.Url" DefaultValue="https://localhost:3000/function.html"/>
-        <bt:Url id="Dialog.Url" DefaultValue="https://localhost:3000/dialog.html"/>
-      </bt:Urls>
-    </Resources>
+        <!-- 追加：タスクペイン/コマンドから任意に確認ダイアログを開く（後で実装） -->
+        <mailappor:ExtensionPoint xsi:type="mailappor:MessageComposeCommandSurface">
+          <mailappor:OfficeTab id="TabDefault">
+            <mailappor:Group id="group.confirm" label="送信前確認">
+              <mailappor:Control xsi:type="mailappor:Button" id="btn.openConfirm"
+                                 label="宛先/添付の確認"
+                                 icon="https://black-pebble-05a52b800.1.azurestaticapps.net/assets/icon-32.png"
+                                 onAction="openConfirmDialog"
+                                 superTip="送信前に宛先と添付を目視確認します。"/>
+            </mailappor:Group>
+          </mailappor:OfficeTab>
+        </mailappor:ExtensionPoint>
+      </mailappor:Host>
+    </mailappor:Hosts>
 
-  </VersionOverrides>
+    <!-- ダイアログ/関数ファイルのドメイン許可 -->
+    <mailappor:WebApplicationInfo>
+      <!-- SSOを使わない場合は省略可。使う場合はここを設定 -->
+    </mailappor:WebApplicationInfo>
+    <mailappor:EquivalentAddins></mailappor:EquivalentAddins>
+  </mailappor:VersionOverrides>
+
+  <!-- ダイアログのドメイン許可 -->
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+
 </OfficeApp>
