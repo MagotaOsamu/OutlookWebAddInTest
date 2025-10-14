@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ov="http://schemas.microsoft.com/office/mailappversionoverrides"
+  xsi:type="MailApp">
+
+  <Id>c3a1b2e3-7d24-4b79-9c12-7d9a5f2a1e77</Id>
+  <Version>1.0.0.1</Version>
+  <ProviderName>OutlookWebAddInTest</ProviderName>
+  <DefaultLocale>ja-JP</DefaultLocale>
+
+  <DisplayName DefaultValue="TEST: Taskpane only (v8)"/>
+  <Description DefaultValue="最小構成のタスクペイン（VersionOverrides を mailappversionoverrides 名前空間に）"/>
+
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
+
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <Requirements>
+    <Sets DefaultMinVersion="1.5">
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+
+  <!-- 旧スキーマでは必須。Compose 相当は ItemEdit -->
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+
+  <Permissions>ReadItem</Permissions>
+
+  <!-- Rule も旧スキーマ準拠（FormType=Edit/Read のみ） -->
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+
+  <!-- ★ 要素名そのものを ov:VersionOverrides に。型も ov:VersionOverridesV1_1 -->
+  <ov:VersionOverrides xsi:type="ov:VersionOverridesV1_1" Version="1.1">
+    <ov:Requirements>
+      <ov:Sets DefaultMinVersion="1.5">
+        <ov:Set Name="Mailbox" MinVersion="1.5"/>
+      </ov:Sets>
+    </ov:Requirements>
+
+    <ov:Hosts>
+      <ov:Host xsi:type="ov:Mailbox">
+        <ov:DesktopFormFactor>
+          <ov:ExtensionPoint xsi:type="ov:MessageComposeCommandSurface">
+            <ov:OfficeTab id="TabDefault">
+              <ov:Group id="grp.test" label="TEST">
+                <ov:Control xsi:type="ov:Button" id="btnTaskpane"
+                            label="Open Taskpane"
+                            icon="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png">
+                  <ov:Action xsi:type="ov:ShowTaskpane">
+                    <ov:SourceLocation resid="taskpaneUrl"/>
+                  </ov:Action>
+                </ov:Control>
+              </ov:Group>
+            </ov:OfficeTab>
+          </ov:ExtensionPoint>
+        </ov:DesktopFormFactor>
+      </ov:Host>
+    </ov:Hosts>
+
+    <ov:Resources>
+      <ov:Urls>
+        <ov:Url id="taskpaneUrl" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </ov:Urls>
+      <ov:ShortStrings>
+        <ov:String id="residAppName" DefaultValue="TEST: Taskpane only (v8)"/>
+      </ov:ShortStrings>
+    </ov:Resources>
+  </ov:VersionOverrides>
+
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+</OfficeApp>
