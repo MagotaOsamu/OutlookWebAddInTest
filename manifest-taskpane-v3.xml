@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
+           xsi:type="MailApp">
+  <Id>7ee2a5f5-2c9a-4f3e-a3b4-7f6d5cb30a11</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>OutlookWebAddInTest</ProviderName>
+  <DefaultLocale>ja-JP</DefaultLocale>
+
+  <DisplayName DefaultValue="TEST: Taskpane only (v3)"/>
+  <Description DefaultValue="最小構成のタスクペイン アドイン（管理センター/PowerShell向け）"/>
+
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
+
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <Requirements>
+    <Sets DefaultMinVersion="1.5">
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+
+  <Permissions>ReadItem</Permissions>
+
+  <!-- Compose のみで表示（最小） -->
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Compose"/>
+  </Rule>
+
+  <!-- ★ VersionOverrides は "VersionOverridesV1_1" 型（プレフィックスなし） -->
+  <VersionOverrides xsi:type="VersionOverridesV1_1" Version="1.1"
+                    xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1">
+    <Requirements>
+      <Sets DefaultMinVersion="1.5">
+        <Set Name="Mailbox" MinVersion="1.5"/>
+      </Sets>
+    </Requirements>
+
+    <Hosts>
+      <Host xsi:type="Mailbox">
+        <DesktopFormFactor>
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="grp.test" label="TEST">
+                <Control xsi:type="Button" id="btnTaskpane"
+                         label="Open Taskpane"
+                         icon="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png">
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="taskpaneUrl"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <Urls>
+        <Url id="taskpaneUrl" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </Urls>
+      <ShortStrings>
+        <String id="residAppName" DefaultValue="TEST: Taskpane only (v3)"/>
+      </ShortStrings>
+    </Resources>
+  </VersionOverrides>
+
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+</OfficeApp>
