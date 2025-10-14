@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:mo="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
+           xsi:type="MailApp">
+
+  <Id>e6a6f3a2-1c6d-4b2f-9f18-7a6d5e6f3a21</Id>
+  <Version>1.0.0.1</Version>
+  <ProviderName>OutlookWebAddInTest</ProviderName>
+  <DefaultLocale>ja-JP</DefaultLocale>
+
+  <DisplayName DefaultValue="TEST: Taskpane only (v5)"/>
+  <Description DefaultValue="最小構成のタスクペイン アドイン（FormSettingsあり / FormType=Edit）"/>
+
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
+
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <Requirements>
+    <Sets DefaultMinVersion="1.5">
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+
+  <!-- これが必須。Compose相当は ItemEdit を使う -->
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+
+  <Permissions>ReadItem</Permissions>
+
+  <!-- Compose相当は FormType=Edit を使う -->
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+    <Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Edit"/>
+  </Rule>
+
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xsi:type="mo:VersionOverrides" Version="1.1">
+    <mo:Requirements>
+      <mo:Sets DefaultMinVersion="1.5">
+        <mo:Set Name="Mailbox" MinVersion="1.5"/>
+      </mo:Sets>
+    </mo:Requirements>
+
+    <mo:Hosts>
+      <mo:Host xsi:type="mo:Mailbox">
+        <mo:DesktopFormFactor>
+          <mo:ExtensionPoint xsi:type="mo:MessageComposeCommandSurface">
+            <mo:OfficeTab id="TabDefault">
+              <mo:Group id="grp.test" label="TEST">
+                <mo:Control xsi:type="mo:Button" id="btnTaskpane"
+                            label="Open Taskpane"
+                            icon="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png">
+                  <mo:Action xsi:type="mo:ShowTaskpane">
+                    <mo:SourceLocation resid="taskpaneUrl"/>
+                  </mo:Action>
+                </mo:Control>
+              </mo:Group>
+            </mo:OfficeTab>
+          </mo:ExtensionPoint>
+        </mo:DesktopFormFactor>
+      </mo:Host>
+    </mo:Hosts>
+
+    <mo:Resources>
+      <mo:Urls>
+        <mo:Url id="taskpaneUrl" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </mo:Urls>
+      <mo:ShortStrings>
+        <mo:String id="residAppName" DefaultValue="TEST: Taskpane only (v5)"/>
+      </mo:ShortStrings>
+    </mo:Resources>
+  </VersionOverrides>
+
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+</OfficeApp>
