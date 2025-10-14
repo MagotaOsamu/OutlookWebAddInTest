@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
+  xsi:type="MailApp">
+
+  <Id>c3a1b2e3-7d24-4b79-9c12-7d9a5f2a1e77</Id>
+  <Version>1.0.0.2</Version>
+  <ProviderName>OutlookWebAddInTest</ProviderName>
+  <DefaultLocale>ja-JP</DefaultLocale>
+
+  <DisplayName DefaultValue="TEST: Taskpane only (v9)"/>
+  <Description DefaultValue="最小構成のタスクペイン（VersionOverrides 要素は mailappversionoverrides/1.1）"/>
+
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
+
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <Requirements>
+    <Sets DefaultMinVersion="1.5">
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+
+  <!-- 旧スキーマでは必須（Compose 相当は ItemEdit） -->
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+
+  <Permissions>ReadItem</Permissions>
+
+  <!-- 旧スキーマ準拠：FormType は Edit/Read のみ -->
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <!-- ★要素そのものを mailappversionoverrides/1.1 に。型も揃える -->
+  <mailappor:VersionOverrides xsi:type="mailappor:VersionOverridesV1_1" Version="1.1">
+    <mailappor:Requirements>
+      <mailappor:Sets DefaultMinVersion="1.5">
+        <mailappor:Set Name="Mailbox" MinVersion="1.5"/>
+      </mailappor:Sets>
+    </mailappor:Requirements>
+
+    <mailappor:Hosts>
+      <mailappor:Host xsi:type="mailappor:Mailbox">
+        <mailappor:DesktopFormFactor>
+          <mailappor:ExtensionPoint xsi:type="mailappor:MessageComposeCommandSurface">
+            <mailappor:OfficeTab id="TabDefault">
+              <mailappor:Group id="grp.test" label="TEST">
+                <mailappor:Control xsi:type="mailappor:Button" id="btnTaskpane"
+                                   label="Open Taskpane"
+                                   icon="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png">
+                  <mailappor:Action xsi:type="mailappor:ShowTaskpane">
+                    <mailappor:SourceLocation resid="taskpaneUrl"/>
+                  </mailappor:Action>
+                </mailappor:Control>
+              </mailappor:Group>
+            </mailappor:OfficeTab>
+          </mailappor:ExtensionPoint>
+        </mailappor:DesktopFormFactor>
+      </mailappor:Host>
+    </mailappor:Hosts>
+
+    <mailappor:Resources>
+      <mailappor:Urls>
+        <mailappor:Url id="taskpaneUrl" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </mailappor:Urls>
+      <mailappor:ShortStrings>
+        <mailappor:String id="residAppName" DefaultValue="TEST: Taskpane only (v9)"/>
+      </mailappor:ShortStrings>
+    </mailappor:Resources>
+  </mailappor:VersionOverrides>
+
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+</OfficeApp>
