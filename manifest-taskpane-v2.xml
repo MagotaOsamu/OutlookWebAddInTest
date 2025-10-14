@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
+  xsi:type="MailApp">
+
+  <!-- 新しい GUID を使用（衝突回避） -->
+  <Id>2f13c3a8-4e3a-4c9a-9f5f-ec3f9a9f7b21</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>OutlookWebAddInTest</ProviderName>
+  <DefaultLocale>ja-JP</DefaultLocale>
+
+  <DisplayName DefaultValue="TEST: Taskpane only (v2)"/>
+  <Description DefaultValue="最小構成のタスクペイン アドイン（イベントなし、DesktopFormFactor あり）"/>
+
+  <!-- icon は実在 PNG を必須 -->
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
+
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <!-- Taskpane は Mailbox 1.5 で十分 -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.5">
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+
+  <!-- 読み取りで十分（最小権限） -->
+  <Permissions>ReadItem</Permissions>
+
+  <!-- 作成中メールにボタンを出す -->
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Compose"/>
+  </Rule>
+
+  <!-- ▼ VersionOverrides は V1_1 の型名で宣言し、DesktopFormFactor を必ず入れる -->
+  <VersionOverrides xsi:type="mailappor:VersionOverridesV1_1" Version="1.1">
+    <mailappor:Requirements>
+      <mailappor:Sets DefaultMinVersion="1.5">
+        <mailappor:Set Name="Mailbox" MinVersion="1.5"/>
+      </mailappor:Sets>
+    </mailappor:Requirements>
+
+    <mailappor:Hosts>
+      <mailappor:Host xsi:type="mailappor:Mailbox">
+        <mailappor:DesktopFormFactor>
+          <mailappor:ExtensionPoint xsi:type="mailappor:MessageComposeCommandSurface">
+            <mailappor:OfficeTab id="TabDefault">
+              <mailappor:Group id="grp.test" label="TEST">
+                <mailappor:Control xsi:type="mailappor:Button" id="btnTaskpane"
+                                   label="Open Taskpane"
+                                   icon="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png">
+                  <mailappor:Action xsi:type="mailappor:ShowTaskpane">
+                    <mailappor:SourceLocation resid="taskpaneUrl"/>
+                  </mailappor:Action>
+                </mailappor:Control>
+              </mailappor:Group>
+            </mailappor:OfficeTab>
+          </mailappor:ExtensionPoint>
+        </mailappor:DesktopFormFactor>
+      </mailappor:Host>
+    </mailappor:Hosts>
+
+    <mailappor:Resources>
+      <mailappor:Urls>
+        <!-- 右ペインで開く URL（https 必須、同ドメインでOK） -->
+        <mailappor:Url id="taskpaneUrl" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </mailappor:Urls>
+      <mailappor:ShortStrings>
+        <mailappor:String id="residAppName" DefaultValue="TEST: Taskpane only (v2)"/>
+      </mailappor:ShortStrings>
+    </mailappor:Resources>
+  </VersionOverrides>
+
+  <!-- 参照先ドメインの許可 -->
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+</OfficeApp>
