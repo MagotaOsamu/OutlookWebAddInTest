@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ルート: Outlook Mail アドインの基本スキーマ -->
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"              <!-- 基本スキーマ（固定） -->
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                     <!-- XSI（型指定に利用; 今回は VersionOverrides で未使用） -->
+  xmlns:ov="http://schemas.microsoft.com/office/mailappversionoverrides"    <!-- ★VersionOverrides 用（/1.1 なし！） -->
+  xsi:type="MailApp">                                                       <!-- アドイン種別: MailApp -->
+
+  <!-- 一意の GUID（他と重複しない値） -->
+  <Id>8f0a1b22-0c0e-4d77-9a8d-6a1e7b3b1c90</Id>
+
+  <!-- バージョン番号（X.Y.Z.W） -->
+  <Version>1.0.0.0</Version>
+
+  <!-- 発行者名 -->
+  <ProviderName>OutlookWebAddInTest</ProviderName>
+
+  <!-- 既定ロケール -->
+  <DefaultLocale>ja-JP</DefaultLocale>
+
+  <!-- 表示名（既定値） -->
+  <DisplayName DefaultValue="TEST: Taskpane only (v11)"/>
+
+  <!-- 説明（既定値） -->
+  <Description DefaultValue="最小タスクペイン。VersionOverrides は mailappversionoverrides（/1.1 なし）、Version属性/型指定なし。"/>
+
+  <!-- 32x32 PNG（実在必須） -->
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+
+  <!-- 80x80 PNG（実在必須） -->
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+
+  <!-- サポートページ（審査時も推奨） -->
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
+
+  <!-- 対象ホスト: Outlook（Mailbox） -->
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <!-- 要件セット（タスクペインのみなら Mailbox 1.5 で十分） -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.5">
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+
+  <!-- ★ 旧スキーマでは必須。ItemEdit は Compose 相当 -->
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <!-- 任意の https URL（有効なページ）。Taskpane の URLとは別物でもOK -->
+        <SourceLocation DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+
+  <!-- 最小権限（読み取り） -->
+  <Permissions>ReadItem</Permissions>
+
+  <!-- どのフォームで有効にするかのルール -->
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <!-- ★ Compose 相当は Edit を使う（過去エラー対策） -->
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+
+  <!-- エンティティ自動ハイライトの無効化（任意） -->
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <!-- ★ UI コマンド等は mailappversionoverrides 側に定義。
+       ここが肝：/1.1 ではなく、末尾なしの名前空間を使う。
+       また、厳格スキーマ対策として xsi:type や Version 属性を付けない。 -->
+  <ov:VersionOverrides>
+    <!-- VersionOverrides セクション内の要件セット（再宣言が推奨） -->
+    <ov:Requirements>
+      <ov:Sets DefaultMinVersion="1.5">
+        <ov:Set Name="Mailbox" MinVersion="1.5"/>
+      </ov:Sets>
+    </ov:Requirements>
+
+    <!-- ホスト別 UI 拡張の定義 -->
+    <ov:Hosts>
+      <ov:Host xsi:type="ov:Mailbox">
+        <!-- デスクトップ向けフォーム ファクター -->
+        <ov:DesktopFormFactor>
+          <!-- メッセージ作成時リボンへのボタン追加 -->
+          <ov:ExtensionPoint xsi:type="ov:MessageComposeCommandSurface">
+            <!-- 既定タブ -->
+            <ov:OfficeTab id="TabDefault">
+              <!-- グループ -->
+              <ov:Group id="grp.test" label="TEST">
+                <!-- ボタン（Taskpane を表示） -->
+                <ov:Control xsi:type="ov:Button" id="btnTaskpane"
+                            label="Open Taskpane"
+                            icon="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png">
+                  <ov:Action xsi:type="ov:ShowTaskpane">
+                    <!-- 下で定義する URL リソースを参照 -->
+                    <ov:SourceLocation resid="taskpaneUrl"/>
+                  </ov:Action>
+                </ov:Control>
+              </ov:Group>
+            </ov:OfficeTab>
+          </ov:ExtensionPoint>
+        </ov:DesktopFormFactor>
+      </ov:Host>
+    </ov:Hosts>
+
+    <!-- リソース定義（URL/文字列） -->
+    <ov:Resources>
+      <ov:Urls>
+        <!-- タスクペインに表示するページ（https 必須） -->
+        <ov:Url id="taskpaneUrl" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </ov:Urls>
+      <ov:ShortStrings>
+        <!-- 表示名のリソース（拡張用） -->
+        <ov:String id="residAppName" DefaultValue="TEST: Taskpane only (v11)"/>
+      </ov:ShortStrings>
+    </ov:Resources>
+  </ov:VersionOverrides>
+
+  <!-- 参照許可ドメイン（iframe/リソースを許可） -->
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+</OfficeApp>
