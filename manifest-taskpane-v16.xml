@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ルート：Outlook Mail アドイン基本スキーマ -->
-<OfficeApp
-  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:ov="http://schemas.microsoft.com/office/mailappversionoverrides"
-  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
-  xsi:type="MailApp">
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ov="http://schemas.microsoft.com/office/mailappversionoverrides" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xsi:type="MailApp">
 
   <Id>9d6f3c41-4b35-4c7b-9a4f-4a5d9a6e2b01</Id>
   <Version>1.0.0.0</Version>

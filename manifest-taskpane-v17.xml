@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ルート：Outlook Mail アドイン基本スキーマ（appforoffice/1.1） -->
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xsi:type="MailApp">
+
+  <!-- 一意の GUID -->
+  <Id>de3f2e9d-78f7-4a4a-bd2f-3e2f7f97f0a1</Id>
+
+  <!-- バージョン (X.Y.Z.W) -->
+  <Version>1.0.0.0</Version>
+
+  <!-- 発行者 -->
+  <ProviderName>OutlookWebAddInTest</ProviderName>
+
+  <!-- 既定ロケール -->
+  <DefaultLocale>ja-JP</DefaultLocale>
+
+  <!-- 表示名（既定値） -->
+  <DisplayName DefaultValue="TEST: Taskpane only (v17)"/>
+
+  <!-- 説明（既定値） -->
+  <Description DefaultValue="最小タスクペイン。VersionOverrides v1.1 準拠。"/>
+
+  <!-- 代表アイコン（32/80） -->
+  <IconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+
+  <!-- サポート URL -->
+  <SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
+
+  <!-- 対象ホスト：Outlook -->
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <!-- ルート側の要件（最低限） -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.5">
+      <Set Name="Mailbox" MinVersion="1.5"/>
+    </Sets>
+  </Requirements>
+
+  <!-- 旧スキーマ必須：ItemEdit（＝Compose/編集） -->
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+
+  <!-- 最小権限 -->
+  <Permissions>ReadItem</Permissions>
+
+  <!-- 有効化ルール（Compose 相当は Edit を使用） -->
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <!-- ここから VersionOverrides v1.1（★名前空間と型は必須） -->
+  <VersionOverrides
+    xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1"
+    xsi:type="VersionOverridesV1_1">
+
+    <!-- （任意）VO 側の要件：親よりも厳しめに -->
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.5">
+        <bt:Set Name="Mailbox" MinVersion="1.5"/>
+      </bt:Sets>
+    </Requirements>
+
+    <!-- ホスト：抽象 Host に具体型 MailHost を指定 -->
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+          <!-- メッセージ作成リボンのコマンド -->
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <OfficeTab id="TabDefault">
+              <!-- Group は <Label resid="..."/> でラベル定義 -->
+              <Group id="grp.test">
+                <Label resid="grpLabel"/>
+
+                <!-- ボタン（Taskpane 表示）。ラベルは resid 参照 -->
+                <Control xsi:type="Button" id="btnTaskpane">
+                  <Label resid="btnLabel"/>
+                  <Supertip>
+                    <Title resid="btnLabel"/>
+                    <Description resid="btnDesc"/>
+                  </Supertip>
+
+                  <!-- ★Icon は size 属性（16/32/80）必須 -->
+                  <Icon>
+                    <bt:Image size="16" resid="icon16"/>
+                    <bt:Image size="32" resid="icon32"/>
+                    <bt:Image size="80" resid="icon80"/>
+                  </Icon>
+
+                  <!-- タスクペインを表示 -->
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>Taskpane.Button1</TaskpaneId>
+                    <SourceLocation resid="taskpaneUrl"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <!-- リソース群（順序：Images → Urls → ShortStrings → LongStrings） -->
+    <Resources>
+      <bt:Images>
+        <!-- 16px は 32px の流用でも可（構文上は問題なし） -->
+        <bt:Image id="icon16" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+        <bt:Image id="icon32" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-32.png"/>
+        <bt:Image id="icon80" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/icon-80.png"/>
+      </bt:Images>
+
+      <bt:Urls>
+        <bt:Url id="taskpaneUrl" DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/index.html"/>
+      </bt:Urls>
+
+      <bt:ShortStrings>
+        <bt:String id="grpLabel" DefaultValue="TEST"/>
+        <bt:String id="btnLabel" DefaultValue="Open Taskpane"/>
+      </bt:ShortStrings>
+
+      <bt:LongStrings>
+        <bt:String id="btnDesc" DefaultValue="タスクペインを開きます。"/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+
+  <!-- 許可ドメイン -->
+  <AppDomains>
+    <AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+  </AppDomains>
+</OfficeApp>
