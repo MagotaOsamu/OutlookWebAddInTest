@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ルート: Outlook Mail アドインの基本スキーマ -->
 <OfficeApp
-  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"              <!-- 基本スキーマ（固定） -->
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                     <!-- XSI（型指定に利用; 今回は VersionOverrides で未使用） -->
-  xmlns:ov="http://schemas.microsoft.com/office/mailappversionoverrides"    <!-- ★VersionOverrides 用（/1.1 なし！） -->
-  xsi:type="MailApp">                                                       <!-- アドイン種別: MailApp -->
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ov="http://schemas.microsoft.com/office/mailappversionoverrides"
+  xsi:type="MailApp">
 
   <!-- 一意の GUID（他と重複しない値） -->
   <Id>8f0a1b22-0c0e-4d77-9a8d-6a1e7b3b1c90</Id>
