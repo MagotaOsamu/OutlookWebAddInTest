@@ -32,6 +32,11 @@
 	<!-- サポート URL -->
 	<SupportUrl DefaultValue="https://black-pebble-05a52b800.1.azurestaticapps.net/"/>
 
+	<!-- 許可ドメイン -->
+	<AppDomains>
+		<AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
+	</AppDomains>
+	
 	<!-- 対象ホスト -->
 	<Hosts>
 		<Host Name="Mailbox"/>
@@ -134,8 +139,4 @@
 		</ov:Resources>
 	</ov:VersionOverrides>
 
-	<!-- 許可ドメイン -->
-	<AppDomains>
-		<AppDomain>https://black-pebble-05a52b800.1.azurestaticapps.net</AppDomain>
-	</AppDomains>
 </OfficeApp>
