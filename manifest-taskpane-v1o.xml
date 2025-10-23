@@ -1,0 +1,52 @@
+xml
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/office/appforoffice/1.1 OfficeAppManifest.xsd" >
+  <Id id="123e4567-e89b-12d3-a456-426614174000"/>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Microsoft</ProviderName>
+  <DefaultLocale>ja-JP</DefaultLocale>
+  <DisplayName>
+    <Override Locale="ja-JP" Value="Officeアプリ"/>
+  </DisplayName>
+  <Description>
+    <Override Locale="ja-JP" Value="Officeアプリの説明"/>
+  </Description>
+  <IconUrl>
+    <Override Locale="ja-JP" Value="https://example.com/icon.png"/>
+  </IconUrl>
+  <HighResolutionIconUrl>
+    <Override Locale="ja-JP" Value="https://example.com/iconhighres.png"/>
+  </HighResolutionIconUrl>
+  <SupportUrl>
+    <Override Locale="ja-JP" Value="https://example.com/support"/>
+  </SupportUrl>
+  <AppDomains>
+    <AppDomain>https://example.com</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Excel"/>
+    <Host Name="Word"/>
+    <Host Name="PowerPoint"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="ExcelApi" MinVersion="1.1"/>
+      <Set Name="WordApi" MinVersion="1.1"/>
+      <Set Name="PowerPointApi" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <ContentApp>
+    <Requirements>
+      <Sets>
+        <Set Name="Content" MinVersion="1.1"/>
+      </Sets>
+    </Requirements>
+    <DefaultSettings>
+      <SourceLocation DefaultValue="https://example.com/app.html">
+        <Override Locale="ja-JP" Value="https://example.com/appja.html"/>
+      </SourceLocation>
+    </DefaultSettings>
+    <Permissions>ReadWriteDocument</Permissions>
+    <AllowSnapshot>true</AllowSnapshot>
+  </ContentApp>
+</OfficeApp>

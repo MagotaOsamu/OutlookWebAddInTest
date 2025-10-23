@@ -1,0 +1,22 @@
+v14でもエラーです。
+同じ過ちをしないよう過去のxmlとエラーを参考に、精査してから次のバージョンを作成してください。そして作成後に数回か見直してください。
+
+PS C:\Users\magot> New-App -OrganizationApp `
+>>  -Url "https://black-pebble-05a52b800.1.azurestaticapps.net/manifest-taskpane-v14.xml" `
+>>  -DefaultStateForUser Enabled `
+>>  -ProvidedTo SpecificUsers `
+>>  -UserList "magota.osamu@magotaosamuoutlook.onmicrosoft.com"
+Write-ErrorMessage : ||このアプリをインストールできません。マニフェスト ファイルがスキーマ定義に準拠していません。The '
+label' attribute is not declared.。。
+発生場所 C:\Users\magot\AppData\Local\Temp\tmpEXO_pmepue4e.thf\tmpEXO_pmepue4e.thf.psm1:1191 文字:13
++             Write-ErrorMessage $ErrorObject
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidData: (:) [New-App]、OwaExtensionOperationException
+    + FullyQualifiedErrorId : [Server=TY4P301MB1423,RequestId=c7e9b43b-d10f-b1d1-6132-a9350047928a,TimeStamp=Thu, 16 O
+   ct 2025 07:16:16 GMT],Write-ErrorMessage
+
+New-App -OrganizationApp `
+ -Url "https://black-pebble-05a52b800.1.azurestaticapps.net/manifest-taskpane-v14.xml" `
+ -DefaultStateForUser Enabled `
+ -ProvidedTo SpecificUsers `
+ -UserList "magota.osamu@magotaosamuoutlook.onmicrosoft.com"
